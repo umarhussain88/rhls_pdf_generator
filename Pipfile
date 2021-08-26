@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 django = "*"
 pandas = "*"
+pyodbc = "*"
+python-dotenv = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 
