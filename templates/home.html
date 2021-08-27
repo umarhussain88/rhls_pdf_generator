@@ -8,6 +8,8 @@
 </div>
 <div class="text-center">
   <h3>{{ student_list.0.school_name }}</h3>
+  <h6>Website:   <a href="https://reidmountdiscovery.ca">https://reidmountdiscovery.ca</a></h6>
+  <h6>Info:  <a href="info@reidmountdiscovery.ca">info@reidmountdiscovery.ca</a></h6>
 </div>
 <div class="container">
 <h5>
@@ -40,20 +42,13 @@ Student Name : {{ student_list.0.first_name }} {{ student_list.0.last_name }}
 <div class="container mt-5">
   <table class="table table-sm">
     <tbody>
-      <tr>
-        <td>12-Sep 2021 - First Day of School</td>
-        <td>13-Sep 2021 - First Day of School</td>
-        <td>14-Sep 2021 - First Day of School</td>
-      </tr>
-      <tr>
-        <td>12-Sep 2021 - First Day of School</td>
-      </tr>
-      <tr>
-        <td>12-Sep 2021 - First Day of School</td>
-      </tr>
-      <tr>
-        <td>12-Sep 2021 - First Day of School</td>
-      </tr>
+    {% for cal in calendar %}
+    <tr>
+      {% for d in cal  %}
+    <td>{{ d }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
     </tbody>
   </table>
 </div>
