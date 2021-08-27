@@ -9,6 +9,7 @@ pandas = "*"
 pyodbc = "*"
 python-dotenv = "*"
 sqlalchemy = "*"
+pdfkit = "*"
 
 [dev-packages]
 ipython = "*"
