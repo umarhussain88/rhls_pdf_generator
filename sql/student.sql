@@ -1,45 +1,58 @@
-CREATE VIEW 
-Report.vwStudentAcademicYear
-AS 
-SELECT 
-            st.FirstName
-       ,    st.LastName
-       ,    st.SchoolLocationId
+CREATE VIEW REPORT.vwStudentClasses_2021
+AS
+SELECT
+            s.FirstName
+       ,    s.LastName
+       ,    s.SchoolLocationId
        ,    em.parents_email
-       ,    st.StudentId
+       ,    s.StudentId
        ,    loc.Name as [school_name]
        ,    sub.Name as [subject_name]
+       ,    cs.DAYOFWEEK
        ,    cs.TimeFrom
        ,    cs.TimeTo
+       ,    cs.REMARKS
 
-FROM School.Students st 
-LEFT JOIN School.StudentClasses scl 
-     ON   st.StudentId = scl.StudentId
-LEFT JOIN school.Classes cl 
-     ON   cl.SubjectId = scl.SubjectId
-LEFT JOIN Administration.SchoolLocations loc 
-     ON   loc.SchoolLocationId = cl.SchoolLocationId
-LEFT JOIN Administration.Subjects sub 
-     ON   sub.SubjectId = cl.SubjectId
-LEFT JOIN School.ClassSchedules cs 
-     ON   cs.ScheduleId = scl.ScheduleId
+
+FROM      school.STUDENTS s
+
+INNER JOIN ADMINISTRATION.SCHOOLTERMS t
+    ON    t.SCHOOLTERMID = s.SCHOOLTERMID
+    AND   t.SCHOOLTERMID = 1017
+
+LEFT JOIN school.STUDENTCLASSES st_cls
+     ON   st_cls.STUDENTID = s.STUDENTID
+
+LEFT JOIN ADMINISTRATION.SUBJECTS sub
+     ON   sub.SUBJECTID = st_cls.SUBJECTID
+     AND  sub.SCHOOLLOCATIONID = s.SCHOOLLOCATIONID
+
+LEFT JOIN school.CLASSES cls
+     ON    cls.SCHOOLLOCATIONID = s.SCHOOLLOCATIONID
+     AND   cls.SUBJECTID = sub.SUBJECTID
+--      AND   cls.CLASSID = cs.CLASSID
+     AND   cls.SCHOOLTERMID = t.SCHOOLTERMID
+
+LEFT JOIN School.ClassSchedules cs
+     ON   cs.ScheduleId = st_cls.ScheduleId
+     AND  cs.CLASSID = cls.CLASSID
+
+LEFT JOIN ADMINISTRATION.SCHOOLLOCATIONS loc
+    ON    loc.SCHOOLLOCATIONID = s.SCHOOLLOCATIONID
+
 
 LEFT JOIN (SELECT StudentId
-            ,   STRING_AGG(PrimaryEmail + 
-                CASE WHEN SecondaryEmail IS NOT NULL 
-                THEN 
+            ,   STRING_AGG(PrimaryEmail +
+                CASE WHEN SecondaryEmail IS NOT NULL
+                THEN
                 ',' + SecondaryEmail
                 ELSE ''
                 END
-            ,  ',') as parents_email 
+            ,  ',') as parents_email
         FROM School.Students
         GROUP BY StudentId) em
-    ON em.StudentId = st.StudentId 
+    ON em.StudentId = s.StudentId
 
--- need to add filter to get current academic year. 
--- INNER JOIN Administration.SchoolLocationCalendar sc_cal 
---     ON sc_cal.SchoolLocationId = loc.SchoolLocationId
---     -- AND sc_cal.CalendarDate >= '01 Sep 2020'
-WHERE scl.StudentId is not null
-
-
+WHERE
+      1= 1
+AND cs.REMARKS IS NOT NULL

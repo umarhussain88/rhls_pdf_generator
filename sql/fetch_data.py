@@ -19,7 +19,7 @@ driver       =    os.getenv('driver')
 azure_con =  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password) 
 
 
-df = pd.read_sql('SELECT * FROM Report.vwStudentAcademicYear', azure_con)
+df = pd.read_sql('SELECT * FROM Report.vwStudentClasses_2021', azure_con)
 
 azure_con.close()
 
@@ -27,11 +27,32 @@ sql_lite_db = list(Path(__file__).parent.parent.glob('*.sqlite3'))[0]
 
 print(sql_lite_db)
 
-engine = create_engine(f"sqlite:///{str(sql_lite_db)}", echo=True)
+engine = create_engine(f"sqlite:///{str(sql_lite_db)}", echo=False)
 
-df = df[['FirstName','LastName','parents_email','StudentId','school_name','subject_name','TimeFrom','TimeTo']]
+trg_cols = ["FirstName","LastName","parents_email",
+            "StudentId","school_name","subject_name","DAYOFWEEK","TimeFrom","TimeTo","REMARKS"]
 
-df.columns = ['first_name','last_name','parents_email','student_id','school_name','subject_name','time_from','time_to']
+df = df[trg_cols]
 
+df = df.rename(columns={
+    "FirstName" : 'first_name',
+    "LastName" : 'last_name',
+    "parents_email" : 'parents_email',
+    "StudentId" : 'student_id',
+    "school_name" : 'school_name',
+    "subject_name" : 'subject_name',
+    "DAYOFWEEK" : 'day_of_week',
+    "TimeFrom" : 'time_from',
+    "TimeTo" : 'time_to',
+    })
 
+s = df['REMARKS'].str.replace('\s{2}' ,' ').str.split(' ',expand=True).copy()
+
+df['zoom_link'] = s[0]
+df['meeting_id'] = s[[3,4,5]].agg(' '.join,1)
+df['zoom_password'] = s[7]
+
+df = df.drop('REMARKS',1)
+    
 df.to_sql('students_student',index=False,con=engine,if_exists='append')
+print('completed writing to sqlite')

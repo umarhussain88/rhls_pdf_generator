@@ -1,4 +1,10 @@
 {% extends "base.html" %} {% load static %} {% block content %}
+<style>
+      body {
+        font-family: 'Montserrat', serif;
+        font-size: 18px;
+      }
+    </style>
 <div class="text-center mt-5">
   <img
     src="{% static 'img/REIDMOUNT-DISCOVERY-SmallWeb.jpg' %}"
@@ -6,17 +12,17 @@
     alt="Responsive image"
   />
 </div>
-<div class="text-center">
+<div class="text-center mt-2">
   <h3>{{ student_list.0.school_name }}</h3>
   <h6>Website:   <a href="https://reidmountdiscovery.ca">https://reidmountdiscovery.ca</a></h6>
   <h6>Info:  <a href="info@reidmountdiscovery.ca">info@reidmountdiscovery.ca</a></h6>
 </div>
-<div class="container">
+<div class="container mt-5">
 <h5>
-Student Name : {{ student_list.0.first_name }} {{ student_list.0.last_name }} 
+{{ student_list.0.first_name }} {{ student_list.0.last_name }} 
 </h5>
 </div>
-<div class="container mb-5">
+<div class="container mb-5 mt-5">
   <table class="table">
     <thead>
       <tr>
@@ -31,21 +37,26 @@ Student Name : {{ student_list.0.first_name }} {{ student_list.0.last_name }}
       <tr>
         <td>{{student.time_from }} - {{ student.time_to }}</td>
         <td>{{ student.subject_name }}</td>
-        <td>{{ student.last_name }}</td>
-        <td>@mdo</td>
+        <td><a href="{{ student.zoom_link }}" class="href">{{ student.meeting_id }}</a></td>
+        <td> {{ student.zoom_password }}</td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
-<div class="text-center"><h2>School Year 2021-2022</h2></div>
+<div class="text-center"><h2>Reidmount Academic Year 2021-2022</h2></div>
 <div class="container mt-5">
-  <table class="table table-sm">
+  <table class="table table-sm table-striped">
     <tbody>
     {% for cal in calendar %}
     <tr>
       {% for d in cal  %}
-    <td>{{ d }}</td>
+
+    {% if ';1' in d %}
+      <td><b><strike>{{ d|slice:":-2" }}</strike></b></td>
+    {% else %}
+      <td>{{ d }}</td>
+    {% endif %}
       {% endfor %}
     </tr>
     {% endfor %}
