@@ -19,7 +19,7 @@ driver       =    os.getenv('driver')
 azure_con =  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password) 
 
 
-df = pd.read_sql('SELECT * FROM Report.vwStudentClasses_2021', azure_con)
+df = pd.read_sql('SELECT * FROM Report.vwStudentClasses_2021 where studentid = 775', azure_con)
 
 azure_con.close()
 
@@ -28,15 +28,14 @@ sql_lite_db = list(Path(__file__).parent.parent.glob('*.sqlite3'))[0]
 print(sql_lite_db)
 
 engine = create_engine(f"sqlite:///{str(sql_lite_db)}", echo=False)
-
-trg_cols = ["FirstName","LastName","parents_email",
+trg_cols = ["student_first_name","student_last_name","parents_email",
             "StudentId","school_name","subject_name","DAYOFWEEK","TimeFrom","TimeTo","REMARKS"]
 
 df = df[trg_cols]
 
 df = df.rename(columns={
-    "FirstName" : 'first_name',
-    "LastName" : 'last_name',
+    "student_first_name" : 'first_name',
+    "student_last_name" : 'last_name',
     "parents_email" : 'parents_email',
     "StudentId" : 'student_id',
     "school_name" : 'school_name',

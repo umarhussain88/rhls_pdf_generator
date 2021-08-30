@@ -1,17 +1,25 @@
-CREATE VIEW REPORT.vwStudentClasses_2021
-AS
+IF OBJECT_ID('report.VWSTUDENTCLASSES_2021') IS NOT NULL
+    DROP VIEW  report.VWSTUDENTCLASSES_2021
+GO
+CREATE VIEW report.VWSTUDENTCLASSES_2021 AS
 SELECT
-            s.FirstName
-       ,    s.LastName
+            s.FirstName                  AS student_first_name
+       ,    s.LastName                   AS student_last_name
        ,    s.SchoolLocationId
        ,    em.parents_email
        ,    s.StudentId
-       ,    loc.Name as [school_name]
-       ,    sub.Name as [subject_name]
+       ,    loc.Name                     AS [school_name]
+       ,    sub.Name                     AS [subject_name]
        ,    cs.DAYOFWEEK
        ,    cs.TimeFrom
        ,    cs.TimeTo
-       ,    cs.REMARKS
+       ,    REPLACE(cs.REMARKS, '"', '') AS REMARKS
+       ,    staff.FIRSTNAME              AS teacher_first_name
+       ,    staff.LASTNAME               AS teacher_last_name
+       ,    s.GUARDIANFIRSTNAME
+       ,    s.GUARDIANLASTNAME
+       ,    s.GUARDIANWORKPHONE
+
 
 
 FROM      school.STUDENTS s
@@ -52,6 +60,9 @@ LEFT JOIN (SELECT StudentId
         FROM School.Students
         GROUP BY StudentId) em
     ON em.StudentId = s.StudentId
+
+LEFT JOIN Company.STAFFS staff
+      ON cs.STAFFID = staff.STAFFID
 
 WHERE
       1= 1

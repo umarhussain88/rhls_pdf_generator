@@ -10,6 +10,7 @@ pyodbc = "*"
 python-dotenv = "*"
 sqlalchemy = "*"
 pdfkit = "*"
+openpyxl = "*"
 
 [dev-packages]
 ipython = "*"

@@ -5,27 +5,28 @@
         font-size: 18px;
       }
     </style>
-<div class="text-center mt-5">
+<div class="text-center jumbotron p-1 p-md-5 rounded bg-dark">
   <img
     src="{% static 'img/REIDMOUNT-DISCOVERY-SmallWeb.jpg' %}"
     class="img-fluid"
     alt="Responsive image"
   />
 </div>
-<div class="text-center mt-2">
+<div class="text-center bg-light">
   <h3>{{ student_list.0.school_name }}</h3>
   <h6>Website:   <a href="https://reidmountdiscovery.ca">https://reidmountdiscovery.ca</a></h6>
   <h6>Info:  <a href="info@reidmountdiscovery.ca">info@reidmountdiscovery.ca</a></h6>
 </div>
 <div class="container mt-5">
-<h5>
+<h5 class="text-dark rounded">
 {{ student_list.0.first_name }} {{ student_list.0.last_name }} 
 </h5>
 </div>
 <div class="container mb-5 mt-5">
-  <table class="table">
+  <table class="table table-bordered">
     <thead>
       <tr>
+        <th scope="col">Day</th>
         <th scope="col">Time</th>
         <th scope="col">Subject</th>
         <th scope="col">Zoom Meeting ID</th>
@@ -35,6 +36,7 @@
      {% for student in student_list %}
     <tbody>
       <tr>
+        <td>{{student.day_of_week }}</td>
         <td>{{student.time_from }} - {{ student.time_to }}</td>
         <td>{{ student.subject_name }}</td>
         <td><a href="{{ student.zoom_link }}" class="href">{{ student.meeting_id }}</a></td>
@@ -44,9 +46,9 @@
     </tbody>
   </table>
 </div>
-<div class="text-center"><h2>Reidmount Academic Year 2021-2022</h2></div>
+<div class="text-center"><h2><u>Reidmount Academic Year 2021-2022</u></h2></div>
 <div class="container mt-5">
-  <table class="table table-sm table-striped">
+  <table class="table-striped table-sm table-bordered">
     <tbody>
     {% for cal in calendar %}
     <tr>
