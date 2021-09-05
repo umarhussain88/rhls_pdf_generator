@@ -2,10 +2,10 @@
 <style>
       body {
         font-family: 'Montserrat', serif;
-        font-size: 18px;
+        font-size: 16px;
       }
     </style>
-<div class="text-center jumbotron p-1 p-md-5 rounded bg-dark">
+<div class="text-center jumbotron p-1 p-md-5 rounded bg-white">
   <img
     src="{% static 'img/REIDMOUNT-DISCOVERY-SmallWeb.jpg' %}"
     class="img-fluid"
@@ -46,9 +46,9 @@
     </tbody>
   </table>
 </div>
-<div class="text-center"><h2><u>Reidmount Academic Year 2021-2022</u></h2></div>
-<div class="container mt-5">
-  <table class="table-striped table-sm table-bordered">
+<div class="text-center"><h5><u>2021-2022</u></h5></div>
+<div class="table-responsive">
+  <table class="table-sm table-bordered mx-auto w-auto mt-1">
     <tbody>
     {% for cal in calendar %}
     <tr>

@@ -9,7 +9,18 @@ SELECT
        ,    em.parents_email
        ,    s.StudentId
        ,    loc.Name                     AS [school_name]
-       ,    sub.Name                     AS [subject_name]
+       ,    CASE WHEN 
+                sub.description IS NULL 
+            OR  LTRIM(RTRIM(sub.[Description])) = LTRIM(RTRIM(sub.name))
+            THEN 
+                sub.name
+            ELSE 
+                LTRIM(RTRIM(sub.name))
+                + ' - ' 
+                + LTRIM(RTRIM(sub.[Description]))
+
+                END                    AS [subject_name]
+
        ,    cs.DAYOFWEEK
        ,    cs.TimeFrom
        ,    cs.TimeTo
@@ -19,6 +30,9 @@ SELECT
        ,    s.GUARDIANFIRSTNAME
        ,    s.GUARDIANLASTNAME
        ,    s.GUARDIANWORKPHONE
+       ,    s.PrimaryEmail               AS [Primary Email]                  
+       ,    s.SecondaryEmail             AS [Secondary Email]
+       ,    g.Grade                         
 
 
 
@@ -63,6 +77,9 @@ LEFT JOIN (SELECT StudentId
 
 LEFT JOIN Company.STAFFS staff
       ON cs.STAFFID = staff.STAFFID
+
+LEFT JOIN Administration.GradeLevels g
+    ON s.GradeLevelId = g.GradeLevelId
 
 WHERE
       1= 1

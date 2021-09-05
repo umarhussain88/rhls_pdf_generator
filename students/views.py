@@ -11,7 +11,7 @@ class StudentView(ListView):
     # df = pd.DataFrame({'date' : pd.date_range('01 Sep 2021', '01 Apr 2022',freq='W-MON')})
     df = pd.read_csv('sql/rhls_2021_cal.csv')
 
-    d =  df.set_index([df.index % 10, df.groupby((df.index) // 4).cumcount()])
+    d =  df.set_index([df.index % 20, df.groupby((df.index) // 2).cumcount()])
     cal = [y['date'].tolist() for x,y in d.groupby(level=0)]
 
 

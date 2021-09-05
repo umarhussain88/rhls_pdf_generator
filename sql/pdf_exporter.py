@@ -21,7 +21,7 @@ azure_con =  pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;D
 
 df = pd.read_sql("""SELECT StudentId
                                     , parents_email 
-                                    , FirstName + ' ' + LastName as student_name
+                                    , student_first_name + ' ' + student_last_name as student_name
                                     , school_name
                        FROM Report.vwStudentClasses_2021""", azure_con)
 
@@ -37,12 +37,14 @@ options = {
     'margin-bottom': '0.0in',
     'margin-left': '0.0in' }
 
+dt = pd.Timestamp('today').strftime('%Y_%m_%d_%H_%M_%S')
+
 for (student,name,email,school),value in df.groupby(['StudentId','student_name','parents_email','school_name']):
     new_url = f"{start_url}={student}"
 
-    trg_dir = Path(__file__).parent.parent.joinpath('export')
+    trg_dir = Path(__file__).parent.parent.joinpath(f'export/pdfs/{dt}')
     if not trg_dir.is_dir():
-        Path.mkdir(trg_dir)
+        Path.mkdir(trg_dir,parents=True)
     
     trg_dir_email = trg_dir.joinpath(f'{email}')
     if not trg_dir_email.is_dir():
